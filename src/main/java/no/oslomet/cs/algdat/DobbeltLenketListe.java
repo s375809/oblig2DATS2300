@@ -12,6 +12,7 @@ public class DobbeltLenketListe<T> implements Liste<T> {
      * @param <T>
      */
     private static final class Node<T> {
+
         private T verdi;
         private Node<T> forrige, neste;
 
@@ -34,16 +35,18 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     // Oppgave 0
     public static int gruppeMedlemmer() {
-        return 0; // Returner hvor mange som er i gruppa deres
+        return 2; // Returner hvor mange som er i gruppa deres
     }
 
     // Oppgave 1
     public DobbeltLenketListe() {
         throw new UnsupportedOperationException();
+
     }
 
     public DobbeltLenketListe(T[] a) {
         throw new UnsupportedOperationException();
+
     }
 
     @Override
@@ -60,15 +63,62 @@ public class DobbeltLenketListe<T> implements Liste<T> {
     @Override
     public String toString() {
         throw new UnsupportedOperationException();
+        if (første== null){
+            return "[]"; //Hvis listen er tom, returneres det en tom liste.
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        Node<T> current = første;
+        while (current.neste != null){
+            sb.append(current.verdi); //Legger til verdi i Strengen
+            sb.append(", "); //Tilsetter komma og mellomrom etter en verdi.
+            current = current.neste; // Går til neste node
+        }
+        sb.append(current.verdi); // Legger til siste verdi uten komma og mellomrom
+        sb.append("]"); //Legger til avsluttende klammeparantes
+
+        return sb.toString(); //Konverterer StringBuilder til en String og deretter returnerer
     }
 
-    public String omvendtString() {
+    public String omvendtString() { //Metode for å representerer listen som en omvendt streng
         throw new UnsupportedOperationException();
+        if (siste == null){
+            return "[]"; //Hvis liste er tom, returner en tom liste
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        Node<T> current = siste;
+        while (current.forrige != null){
+            sb.append(current.verdi); //Legger til verdien i strengen
+            sb.append(", "); //Legger til komma og mellomrom etter en verdi.
+            current = current.forrige; //Går til forrige node
+        }
+        sb.append(current.verdi); //Legger til siste verdi, uten komma og mellomrom
+        sb.append("]"); //Legger til avsluttende klammeparantes
+
+        return sb.toString();
     }
 
     @Override
-    public boolean leggInn(T verdi) {
-        throw new UnsupportedOperationException();
+    public boolean leggInn(T verdi) { //Metode som legger til en verdi i listen
+        if (verdi == null) {
+            throw new UnsupportedOperationException("Kan ikke legge til null");
+        }
+
+        Node<T> nyNode = new Node<>(verdi); //Lager ny node med den angitte verdien
+        if (første == null) {
+            første = nyNode; //Hvis listen er tom, blir den nye noden både første og siste.
+            siste = nyNode;
+        } else {
+            siste.neste = nyNode; //sett den nye noden som "neste" frem til den nåværende siste node
+            nyNode.forrige = siste; //setter den nåværende siste noden som "forrige" til den nye noden
+            siste = nyNode; //Oppdaterer pekeren til siste node til den nye node.
+        }
+        endringer++; //øker antallet endringer i listen
+        antall++; //øker antall elementer i listen
+
+        return true; //returerer true for å indikere at verdi har blitt lagt til
     }
 
     // Oppgave 3
