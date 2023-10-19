@@ -63,12 +63,12 @@ public class DobbeltLenketListe<T> implements Liste<T> {
     @Override
     public String toString() {
         throw new UnsupportedOperationException();
-        if (første== null){
+        if (hode== null){
             return "[]"; //Hvis listen er tom, returneres det en tom liste.
         }
         StringBuilder sb = new StringBuilder();
         sb.append("[");
-        Node<T> current = første;
+        Node<T> current = hode;
         while (current.neste != null){
             sb.append(current.verdi); //Legger til verdi i Strengen
             sb.append(", "); //Tilsetter komma og mellomrom etter en verdi.
@@ -82,13 +82,13 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     public String omvendtString() { //Metode for å representerer listen som en omvendt streng
         throw new UnsupportedOperationException();
-        if (siste == null){
+        if (hale == null){
             return "[]"; //Hvis liste er tom, returner en tom liste
         }
 
         StringBuilder sb = new StringBuilder();
         sb.append("[");
-        Node<T> current = siste;
+        Node<T> current = hale;
         while (current.forrige != null){
             sb.append(current.verdi); //Legger til verdien i strengen
             sb.append(", "); //Legger til komma og mellomrom etter en verdi.
@@ -107,13 +107,13 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         }
 
         Node<T> nyNode = new Node<>(verdi); //Lager ny node med den angitte verdien
-        if (første == null) {
-            første = nyNode; //Hvis listen er tom, blir den nye noden både første og siste.
-            siste = nyNode;
+        if (hode == null) {
+            hode = nyNode; //Hvis listen er tom, blir den nye noden både første og siste.
+            hale = nyNode;
         } else {
-            siste.neste = nyNode; //sett den nye noden som "neste" frem til den nåværende siste node
-            nyNode.forrige = siste; //setter den nåværende siste noden som "forrige" til den nye noden
-            siste = nyNode; //Oppdaterer pekeren til siste node til den nye node.
+            hale.neste = nyNode; //sett den nye noden som "neste" frem til den nåværende siste node
+            nyNode.forrige = hale; //setter den nåværende siste noden som "forrige" til den nye noden
+            hale = nyNode; //Oppdaterer pekeren til siste node til den nye node.
         }
         endringer++; //øker antallet endringer i listen
         antall++; //øker antall elementer i listen
@@ -124,49 +124,195 @@ public class DobbeltLenketListe<T> implements Liste<T> {
     // Oppgave 3
     private Node<T> finnNode(int indeks) {
         throw new UnsupportedOperationException();
+
+        indeksKontroll(indeks, false); // Sjekker om indeksen er lovlig
+
+        Node<T> current;
+        if (indeks < antall / 2) {
+            current = hode; // Starter fra hodet
+            for (int i = 0; i < indeks; i++) {
+                current = current.neste;
+            }
+        } else {
+            current = hale; // Starter fra halen
+            for (int i = antall - 1; i > indeks; i--) {
+                current = current.forrige;
+            }
+        }
+
+        return current;
     }
 
     @Override
     public T hent(int indeks) {
         throw new UnsupportedOperationException();
+
+        ndeksKontroll(indeks, false); // Sjekker om indeksen er lovlig
+
+        Node<T> node = finnNode(indeks);
+        return node.verdi;
     }
 
     @Override
     public T oppdater(int indeks, T nyverdi) {
         throw new UnsupportedOperationException();
+
+        indeksKontroll(indeks, false); // Sjekker om indeksen er lovlig
+
+        Node<T> node = finnNode(indeks);
+        T gammelVerdi = node.verdi;
+        node.verdi = nyverdi;
+        endringer++;
+        return gammelVerdi;
     }
 
 
     public Liste<T> subliste(int fra, int til) {
         throw new UnsupportedOperationException();
+
+        fraTilKontroll(fra, til, antall); // Sjekker om indeksene er lovlige
+
+        Liste<T> subliste = new DobbeltLenketListe<>();
+        Node<T> current = finnNode(fra);
+
+        for (int i = fra; i < til; i++) {
+            subliste.leggInn(current.verdi);
+            current = current.neste;
+        }
+
+        return subliste;
     }
 
     // Oppgave 4
     @Override
     public int indeksTil(T verdi) {
         throw new UnsupportedOperationException();
+
+        if (verdi == null) {
+            return -1;
+        }
+
+        Node<T> currentNode = hode;
+        for (int i = 0; i < antall; i++) {
+            if (verdi.equals(currentNode.verdi)) {
+                return i;
+            }
+            currentNode = currentNode.neste;
+        }
+
+        return -1;
     }
 
     @Override
     public boolean inneholder(T verdi) {
         throw new UnsupportedOperationException();
+        return indeksTil(verdi) != -1;
+    }
+
+    // Indre Node-klasse for å representere elementer i listen
+    private static final class Node<T> {
+        private T verdi;
+        private Node<T> forrige, neste;
+
+        private Node(T verdi, Node<T> forrige, Node<T> neste) {
+            this.verdi = verdi;
+            this.forrige = forrige;
+            this.neste = neste;
+        }
+
+        private Node(T verdi) {
+            this(verdi, null, null);
+        }
     }
 
     // Oppgave 5
     @Override
     public void leggInn(int indeks, T verdi) {
         throw new UnsupportedOperationException();
+
+        // Sjekker om indeksen er lovlig for innsetting
+        indeksKontroll(indeks, true);
+
+        // Sjekker om verdi er null
+        Objects.requireNonNull(verdi, "Det er ikke tillatt å legge til null-verdier i listen.");
+
+        if (indeks == 0) {
+            // Legger til i starten av listen
+            hode = new Node<>(verdi, null, hode);
+            if (hode.neste != null) {
+                hode.neste.forrige = hode;
+            }
+            if (antall == 0) {
+                hale = hode;
+            }
+        } else if (indeks == antall) {
+            // Legger til i slutten av listen
+            hale = new Node<>(verdi, hale, null);
+            if (hale.forrige != null) {
+                hale.forrige.neste = hale;
+            }
+            if (antall == 0) {
+                hode = hale;
+            }
+        } else {
+            // Legger til i midten av listen
+            Node<T> forrigeNode = finnNode(indeks - 1);
+            Node<T> nyNode = new Node<>(verdi, forrigeNode, forrigeNode.neste);
+            forrigeNode.neste = nyNode;
+            nyNode.neste.forrige = nyNode;
+        }
+
+        antall++;
+        endringer++;
     }
 
     // Oppgave 6
     @Override
     public T fjern(int indeks) {
         throw new UnsupportedOperationException();
+
+        indeksKontroll(indeks, false); // Sjekker om indeksen er lovlig
+
+        Node<T> node = finnNode(indeks);
+
+        if (antall == 1) {
+            // Hvis det er kun ett element i listen
+            hode = hale = null;
+        } else if (indeks == 0) {
+            // Hvis første element fjernes
+            hode = hode.neste;
+            hode.forrige = null;
+        } else if (indeks == antall - 1) {
+            // Hvis siste element fjernes
+            hale = hale.forrige;
+            hale.neste = null;
+        } else {
+            // Hvis et element i midten fjernes
+            node.forrige.neste = node.neste;
+            node.neste.forrige = node.forrige;
+        }
+
+        T verdi = node.verdi;
+        node.forrige = node.neste = null; // Bryter pekerne til den fjernede noden
+        antall--;
+        endringer++;
+        return verdi;
     }
 
     @Override
     public boolean fjern(T verdi) {
         throw new UnsupportedOperationException();
+
+        if (verdi == null) return false;
+
+        for (Node<T> node = hode; node != null; node = node.neste) {
+            if (verdi.equals(node.verdi)) {
+                fjern(indeks(node.verdi)); // Bruker indeks-metoden for å finne indeksen
+                return true;
+            }
+        }
+
+        return false;
     }
 
     // Oppgave 7
