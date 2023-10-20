@@ -42,21 +42,41 @@ public class DobbeltLenketListe<T> implements Liste<T> {
     public DobbeltLenketListe() {
         throw new UnsupportedOperationException();
 
+        hode = null; // Setter hode til null for å lage en tom liste
+        hale = null; // Setter hale til null for å lage en tom liste
+        antall = 0;  // Setter antall til 0 siden listen er tom
+        endringer = 0; // Setter endringer til 0
     }
 
     public DobbeltLenketListe(T[] a) {
         throw new UnsupportedOperationException();
 
+        Objects.requireNonNull(a, "Array a kan ikke være null."); // Sjekker om a er null og kaster en NullPointerException om det er tilfelle
+        for (T verdi : a) {
+            if (verdi != null) { // Sjekker om verdi er null
+                if (hode == null) {
+                    hode = hale = new Node<>(verdi); // Setter både hode og hale til en ny node med verdien
+                } else {
+                    hale = hale.neste = new Node<>(verdi, hale, null); // Oppretter en ny node bak hale og setter hale til den nye noden
+                }
+                antall++; // Øker antall elementer i listen
+            }
+        }
+        endringer = 0; // Setter endringer til 0
     }
 
     @Override
     public int antall() {
         throw new UnsupportedOperationException();
+
+        return antall; // Returnerer antall elementer i listen
     }
 
     @Override
     public boolean tom() {
         throw new UnsupportedOperationException();
+
+        return antall == 0; // Returnerer true hvis antall er lik 0 (listen er tom), ellers false
     }
 
     // Oppgave 2
@@ -147,7 +167,7 @@ public class DobbeltLenketListe<T> implements Liste<T> {
     public T hent(int indeks) {
         throw new UnsupportedOperationException();
 
-        ndeksKontroll(indeks, false); // Sjekker om indeksen er lovlig
+        indeksKontroll(indeks, false); // Sjekker om indeksen er lovlig
 
         Node<T> node = finnNode(indeks);
         return node.verdi;
@@ -335,6 +355,8 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
         private DobbeltLenketListeIterator(int indeks) {
             throw new UnsupportedOperationException();
+
+
         }
 
         @Override
@@ -345,12 +367,27 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         @Override
         public T next() {
             throw new UnsupportedOperationException();
+
+            if (iteratorendringer != endringer) {
+                throw new ConcurrentModificationException("Listen er endret utenfor iteratoren.");
+            }
+
+            if (!hasNext()) {
+                throw new NoSuchElementException("Ingen flere elementer i listen.");
+            }
+
+            T verdi = denne.verdi;
+            denne = denne.neste;
+            kanFjerne = true;
+            return verdi;
+        }
         }
 
         // Oppgave 9:
         @Override
         public void remove() {
             throw new UnsupportedOperationException();
+
         }
     }
     @Override
