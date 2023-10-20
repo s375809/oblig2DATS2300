@@ -2,9 +2,8 @@
 # Obligatorisk Oppgave 2 i DATS2300 - Algoritmer og Datastrukturer
 
 Denne oppgaven er en innlevering i DATS2300 - Algoritmer og datastrukturer. Den er innlevert av følgende studenter:
-* s123456@oslomet.no
-* s654321@oslomet.no
-* ...
+* s375809@oslomet.no
+* s375098@oslomet.no
 
 ## Arbeidsfordeling
 I oppgaven har vi hatt følgende arbeidsfordeling:
