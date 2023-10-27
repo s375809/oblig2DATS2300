@@ -242,13 +242,13 @@ class Oppgave4Test {
     @Test
     void indeksTilTom() {
         Liste<Integer> liste = new DobbeltLenketListe<>();
-        assertEquals(-1, liste.indeksTil(2), "En tom liste skal ikke inneholde noen verdier.");
+        assertEquals(-1, liste.indeksTil(2), "Tom liste skal ikke inneholde noen som helst verdier.");
     }
 
     @Test
     void indeksTilNull() {
         Liste<Integer> liste = new DobbeltLenketListe<>();
-        assertDoesNotThrow(() -> liste.indeksTil(null), "Skal ikke kaste feilmelding med null som verdi.");
+        assertDoesNotThrow(() -> liste.indeksTil(null), "Skal ikke kaste feilmelding hvis null  er satt som verdi.");
         assertEquals(-1, liste.indeksTil(null), "Nullpeker skal ikke finnes i lista.");
     }
 
@@ -256,7 +256,7 @@ class Oppgave4Test {
     void indeksTilDiverse() {
         Liste<Integer> liste = new DobbeltLenketListe<>(new Integer[] {1, 3, 5, 7});
         for (int i = 0; i < 4; ++i) {
-            assertEquals(i, liste.indeksTil(2*i+1), "Verdier finnes på feil sted.");
+            assertEquals(i, liste.indeksTil(2*i+1), "Verdier er plassert på feil sted.");
         }
         assertEquals(-1, liste.indeksTil(0), "Finner ikke-eksisterende verdi.");
     }
@@ -302,9 +302,9 @@ class Oppgave5Test {
     @Test
     void leggInnTom() {
         DobbeltLenketListe<Integer> liste = new DobbeltLenketListe<>();
-        assertThrows(IndexOutOfBoundsException.class, () -> liste.leggInn(-1, 1), "Gir ingen eller gal feilmelding om vi legger inn på negativ indeks.");
-        assertThrows(IndexOutOfBoundsException.class, () -> liste.leggInn(1, 1), "Gir ingen eller gal feilmelding om vi legger inn på for høy indeks.");
-        assertDoesNotThrow(() -> liste.leggInn(0, 1), "Skal være lov med indeks lik 0 også i tom liste.");
+        assertThrows(IndexOutOfBoundsException.class, () -> liste.leggInn(-1, 1), "Resulterer til ingen/feilmelding om vi legger inn på negativ indeks. ");
+        assertThrows(IndexOutOfBoundsException.class, () -> liste.leggInn(1, 1), "Resulterer til ingen/feilmelding om vi legger inn på for høy indeks.");
+        assertDoesNotThrow(() -> liste.leggInn(0, 1), "Tillatter indeks lik 0 også i tom liste.");
     }
 
     @Test
