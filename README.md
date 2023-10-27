@@ -9,7 +9,13 @@ Denne oppgaven er en innlevering i DATS2300 - Algoritmer og datastrukturer. Den 
 I oppgaven har vi hatt følgende arbeidsfordeling:
 * s375809 har hatt ansvar oppgave 0, 2, 4 og 6.
 * s654321 har hatt ansvar oppgave 1, 3, 5.
-* Vi har samarbeidet om oppgave 7 og 8.
+* Vi har samarbeidet om oppgave 7 og 8. 
+
+PS! Vi ønsker å nevne at besvarelsen til oppgave 8 ikke er helt korrekt (det dukker opp error når den runner). 
+Vi har forsøkt etter vår beste evne, men har dessverre ikke fått til å rette opp feilene. 
+Vi har i utgangspunktet hatt planner om å dra innom øvingstimene/lab denne uken, for å få en forståelse på hva som må rettes opp, 
+men dessverre grunnet en veldig travel uke har vi ikke hatt mulighet til gjøre det.
+
 
 ## Oppgavebeskrivelser
 

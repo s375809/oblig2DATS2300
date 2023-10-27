@@ -175,7 +175,7 @@ public class DobbeltLenketListe<T> implements Liste<T> {
             }
             return now;
         }
-        //sjekker hvis indeksen er nærmere halen, dersom den er det så går den fra halen nedover mot indeksen
+        //Kontrollerer hvis indeksen er nærmere halen, dersom den er det så går den fra halen nedover mot indeksen
         else {
             now = hale;
             for (int i = antall - 1; i > indeks; i--){
@@ -195,7 +195,7 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     @Override
     public T oppdater(int indeks, T nyverdi) {
-        //sjekker om verdien ikke er null
+        //Kontrollerer om verdien ikke er null
         Objects.requireNonNull(nyverdi, "ny verdi må være noe");
 
         //finner noden med den gitte indeksen
@@ -211,14 +211,14 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
 
     public Liste<T> subliste(int fra, int til) {
-        //sjekker om indeksene er gyldige
+        //Kontrollerer om indeksene er gyldige
         fraTilKontroll(fra, til);
 
         //lager en ny liste
         Liste<T> liste = new DobbeltLenketListe<>();
         int lengde = til - fra;
 
-        //hvis legden på listen er mindre enn 1 så skal lista returneres
+        //Dersom legden på listen er mindre enn 1 så skal lista returneres
         if (lengde < 1) {
             return liste;
         }
@@ -254,7 +254,7 @@ public class DobbeltLenketListe<T> implements Liste<T> {
     @Override
     public boolean inneholder(T verdi) {
         //finner indeksTil metoden for å finne indeksen til den gitte verdien og sjekker om det ikke blir -1
-        //fordi hvis -1 blir returnert så betyr det at den ikke finnes i listen
+        //Dersom -1 blir returnert så betyr det at den ikke finnes i listen
         return indeksTil(verdi) != -1;
     }
 
@@ -262,10 +262,10 @@ public class DobbeltLenketListe<T> implements Liste<T> {
     // Oppgave 5
     @Override
     public void leggInn(int indeks, T verdi) {
-        //sjekker om verdien ikke er null
-        Objects.requireNonNull(verdi, "Verdien kan ikke være null");
+        //Kontrollerer om verdien ikke er null
+        Objects.requireNonNull(verdi, "Verdi er null. Verdien må være større enn null");
 
-        //Sjekker lengden på indeks
+        //Kontrollerer lengden på indeks
         if (indeks > antall){
             throw new IndexOutOfBoundsException("Indeksen er større enn antall noder");
         } else if (indeks < 0) throw new IndexOutOfBoundsException("Indeksen kan ikke være negativ");
@@ -287,7 +287,7 @@ public class DobbeltLenketListe<T> implements Liste<T> {
             for (int i = 0; i < indeks; i++) node = node.neste;{
                 node = new Node<T>(verdi, node.forrige, node);
             }
-            //setter inn den nye verdien i listen
+            //Tilsetter inn den nye verdien i listen
             node.neste.forrige = node.forrige.neste = node;
         }
 
@@ -465,11 +465,11 @@ public class DobbeltLenketListe<T> implements Liste<T> {
     }
     @Override
     public Iterator<T> iterator() {
-        throw new UnsupportedOperationException();
+        return new DobbeltLenketListeIterator();
     }
 
     public Iterator<T> iterator(int indeks) {
-        throw new UnsupportedOperationException();
+        return new DobbeltLenketListeIterator(indeks);
     }
 
     // Oppgave 10
